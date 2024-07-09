@@ -1,9 +1,11 @@
 library(stringr)
 library(purrr)
 library(dplyr)
+library(tidyr)
 library(readr)
 library(rstan)
 
+source("code/utils.R")
 
 df_games_reg <- read_csv("data/games_clean.csv")
 
@@ -21,7 +23,7 @@ df_games_both_sides_reg <- df_games_reg |>
               spread_line = -spread_line,
               bye = -bye,
               mnf = -mnf,
-              tnf = -tnf
+              mini = -mini
             ) |>
               mutate(Side = "Away"))
 
@@ -34,7 +36,7 @@ df_games_both_sides_reg <- df_games_both_sides_reg |>
 table_data_reg <- df_games_both_sides_reg |>
   filter(bye == 0,
          mnf == 0,
-         tnf == 0)  |>
+         mini == 0)  |>
   mutate(Type = "Equivalent Rest")  |>
   bind_rows(
     df_games_both_sides_reg |>
@@ -43,8 +45,8 @@ table_data_reg <- df_games_both_sides_reg |>
   ) |>
   bind_rows(
     df_games_both_sides_reg |>
-      filter(tnf == 1)  |>
-      mutate(Type = "TNF Rest")
+      filter(mini == 1)  |>
+      mutate(Type = "mini Rest")
   ) |>
   bind_rows(
     df_games_both_sides_reg |>
@@ -54,7 +56,7 @@ table_data_reg <- df_games_both_sides_reg |>
   mutate(Type = factor(Type,
                        c("Equivalent Rest",
                          "MNF Rest",
-                         "TNF Rest",
+                         "mini Rest",
                          "Bye Rest"))) |>
   group_by(Side, Type, era) |>
   summarise(
@@ -92,7 +94,7 @@ write(print(xtable::xtable(x = dropped_games, digits = 0), include.rownames=FALS
 
 table_games_count <- df_games_reg |>
   drop_na(c(days_since_last_game_home_team, days_since_last_game_away_team)) |>
-  rename(Mini = tnf,
+  rename(Mini = mini,
          `Rest Days Home` = days_since_last_game_home_team,
          `Rest Days Away` = days_since_last_game_away_team,
          Bye = bye,
@@ -101,7 +103,10 @@ table_games_count <- df_games_reg |>
   summarise(
     Count = n()
   ) |>
-  ungroup()
+  ungroup()  |>
+    arrange(abs(`Rest Days Home` - `Rest Days Away`),
+            `Rest Days Home`,
+            `Rest Days Away`)
 
 
 write(print(xtable::xtable(x = table_games_count, digits = 0), include.rownames=FALSE),

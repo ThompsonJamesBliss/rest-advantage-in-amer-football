@@ -26,33 +26,14 @@ stan_data <- list(
   era = as.integer(as.factor(df_games$era)),
   h_adv = df_games$true_home,
   bye = df_games$bye,
-  tnf = df_games$tnf,
+  mini = df_games$mini,
   mnf = df_games$mnf
 )
 
 
 for(o in params$outcomes){
-
-  stan_data$outcome <- df_games |> pull(o)
-
-  # ### Fit Model
-  model <- stan(
-    file = "stan/model_split_bye.stan",
-    data = stan_data,
-    seed = params$seed,
-    chains = params$chains,
-    iter = params$iter,
-    warmup = params$warmup,
-    control = list(adapt_delta = params$adapt_delta),
-    pars = c("mu"),
-    include = F
-  )
-
-  write_rds(model,
-            paste0("stan_results/split_bye__", o, "__", params$min_season, "_", params$max_season,  ".rds"))
-
-
-  rm("model")
+  
+  
 
 
   # ### Fit Model
@@ -74,5 +55,52 @@ for(o in params$outcomes){
 
   rm("model")
 
+
+  stan_data$outcome <- df_games |> pull(o)
+
+  # ### Fit Model
+  model <- stan(
+    file = "stan/model_split_bye_CBA.stan",
+    data = stan_data,
+    seed = params$seed,
+    chains = params$chains,
+    iter = params$iter,
+    warmup = params$warmup,
+    control = list(adapt_delta = params$adapt_delta),
+    pars = c("mu"),
+    include = F
+  )
+
+  write_rds(model,
+            paste0("stan_results/split_bye_cba__", o, "__", params$min_season, "_", params$max_season,  ".rds"))
+
+
+  rm("model")
+
+
+  
+  stan_data$outcome <- df_games |> pull(o)
+  
+  # ### Fit Model
+  model <- stan(
+    file = "stan/model_split_bye_season.stan",
+    data = stan_data,
+    seed = params$seed,
+    chains = params$chains,
+    iter = params$iter,
+    warmup = params$warmup,
+    control = list(adapt_delta = params$adapt_delta),
+    pars = c("mu"),
+    include = F
+  )
+  
+  write_rds(model,
+            paste0("stan_results/split_bye_season__", o, "__", params$min_season, "_", params$max_season,  ".rds"))
+  
+  
+  rm("model")
+  
+  
+  
 }
 

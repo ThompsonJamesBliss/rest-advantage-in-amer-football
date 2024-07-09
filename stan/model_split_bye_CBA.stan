@@ -3,7 +3,9 @@ data {
   int<lower=1> num_games;                                     // number of games
 
   int<lower=1> num_seasons;                                   // number of seasons
+  int<lower=1> num_eras;                                      // number of seasons
   int<lower=1, upper=num_seasons> season[num_games];          // seasons
+  int<lower=1, upper=num_eras> era[num_games];          // seasons
 
   int<lower=1,upper=num_clubs> home_team_code[num_games];     // home club for game g
   int<lower=1,upper=num_clubs> away_team_code[num_games];     // away club for game g
@@ -22,7 +24,7 @@ parameters {
   real<lower=0,upper=1> gamma;
   real alpha_ha_trend;                 // home advantage trend
   real alpha_ha_intercept;              // home advantage intercept
-  real alpha_bye;                            // bye advantage
+  vector[num_eras] alpha_bye;                            // bye advantage
   real alpha_mnf;                           // mnf advantage
   real alpha_mini;                           // mini advantage
 
@@ -52,9 +54,10 @@ model {
 
   }
 
+
   // likelihood
   for (g in 1:num_games) {
-    Ey[g] = theta[home_team_code[g], season[g]] - theta[away_team_code[g], season[g]] + (alpha_ha_trend * season[g] + alpha_ha_intercept) * h_adv[g] + alpha_bye * bye[g] + alpha_mnf * mnf[g] + alpha_mini * mini[g];
+    Ey[g] = theta[home_team_code[g], season[g]] - theta[away_team_code[g], season[g]] + (alpha_ha_trend * season[g] + alpha_ha_intercept) * h_adv[g] + alpha_bye[era[g]] * bye[g] + alpha_mnf * mnf[g] + alpha_mini * mini[g];
   }
 
   outcome ~ normal(Ey, sigma_game);
@@ -66,7 +69,7 @@ generated quantities{
   real log_lik = 0;
 
   for(g in 1:num_games) {
-    Ey[g] = theta[home_team_code[g], season[g]] - theta[away_team_code[g], season[g]] + (alpha_ha_trend * season[g] + alpha_ha_intercept) * h_adv[g] + alpha_bye * bye[g] + alpha_mnf * mnf[g] + alpha_mini * mini[g];
+    Ey[g] = theta[home_team_code[g], season[g]] - theta[away_team_code[g], season[g]] + (alpha_ha_trend * season[g] + alpha_ha_intercept) * h_adv[g] + alpha_bye[era[g]] * bye[g] + alpha_mnf * mnf[g] + alpha_mini * mini[g];
 
     // Update total log likelihood
     log_lik += normal_lpdf(outcome[g] | Ey[g], sigma_game);

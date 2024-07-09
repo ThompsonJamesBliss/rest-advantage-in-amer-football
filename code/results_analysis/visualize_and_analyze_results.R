@@ -1,4 +1,3 @@
-library(nflreadr)
 library(ggridges)
 library(tidyverse)
 library(rstan)
@@ -8,11 +7,9 @@ source("code/utils.R")
 
 df_games <- read_csv("data/games_clean.csv")
 
-params <- list(
-  models = c("bye", "mnf", "tnf_mini_bye"),
-  team_division = "AFC East")
+params <- list(team_division = "AFC East")
 
-df_club <- load_teams() |>
+df_club <- nflreadr::load_teams() |>
   select(team_name = team_abbr,
          team_division,
          team_color,
@@ -23,7 +20,7 @@ loo_objects = list()
 
 i = 1
 
-for(f in list.files("stan_results", pattern = ".rds")){
+for(f in list.files("stan_results", pattern = ".rds")[!grepl("season", list.files("stan_results", pattern = ".rds"))]){
 
   print(f)
 
@@ -55,8 +52,6 @@ for(f in list.files("stan_results", pattern = ".rds")){
 
 
   model <- read_rds(paste0("stan_results/", f))
-
-  model_plot <- model
 
   model_results <- model |>  rstan::extract()
 
@@ -155,21 +150,22 @@ for(f in list.files("stan_results", pattern = ".rds")){
 
   plot_density_ridges <- df_plot_data |>
     ggplot(aes(value, type)) +
+    geom_vline(xintercept = 0, linetype = "dashed") +
     geom_density_ridges(fill = "lightblue", scale = 0.95) +
     theme_bw() +
     xlab("Points Added") +
     ylab("") +
-    xlim(min(df_plot_data$value)-0.3, max(df_plot_data$value)*1.3) +
+    xlim(-2.5, 7.5) +
     ggtitle(model_title) +
     geom_text(
       df_plot_data |>
         group_by(type) |>
-        summarise(text = paste0("Pct <0:\n", pretty_digits(mean(value < 0)  * 100, 1), "%")),
+        summarise(text = paste0(pretty_digits(mean(value > 0)  * 100, 1), "%")),
 
-      mapping = aes(min(df_plot_data$value), type, label = text),
-      vjust = -0.5
+      mapping = aes(-2, type, label = text),
+      vjust = -0.1,
+      hjust = 0.5
     ) +
-
     labs(subtitle = model_sub) +
     geom_text(
       df_plot_data |>
@@ -181,12 +177,46 @@ for(f in list.files("stan_results", pattern = ".rds")){
                                 pretty_digits(quantile(value, 0.975), 2),
                                 ")")),
 
-      mapping = aes(max(df_plot_data$value) * 1.25, type, label = text),
-      vjust = -0.5,
-      hjust = 0.75
+      mapping = aes(x = 6, type, label = text),
+      vjust = -0.1,
+      hjust = 0.5
+    ) +
+    geom_text(
+      
+      
+      df_plot_data |>
+        ungroup() |>
+        filter(type == last(levels(type))) |>
+        group_by(type) |>
+        summarise(
+          text = "Pct >0:",
+        ),
+      fontface = "bold",
+      mapping = aes(x = -2, label = text, y = type),
+      vjust = -4.1,
+      hjust = 0.5
+      
+    ) +
+    geom_text(
+      
+      
+      df_plot_data |>
+        ungroup() |>
+        filter(type == last(levels(type))) |>
+        group_by(type) |>
+        summarise(
+          text = "Median (95% CI):",
+        ),
+      fontface = "bold",
+      mapping = aes(x = 6, label = text, y = type),
+      vjust = -4.1,
+      hjust = 0.5
+      
     )
 
 
+  
+  fontface = "bold"
 
   ggsave(paste0("visualizations/density__", outcome, "__", type, "__", seasons, ".png"),
          plot_density_ridges,
@@ -208,7 +238,7 @@ for(f in list.files("stan_results", pattern = ".rds")){
     era = as.integer(as.factor(df_games_temp$era)),
     h_adv = df_games_temp$true_home,
     bye = df_games_temp$bye,
-    tnf = df_games_temp$tnf,
+    mini = df_games_temp$mini,
     mnf = df_games_temp$mnf
   )
 
@@ -228,7 +258,7 @@ rownames(df_compare_point_diff)[rownames(df_compare_point_diff) == "model2"] = "
 df_compare_point_diff |>
   as.data.frame() |>
   mutate(outcome = "Point Diff") |>
-  write.csv("Loo_Results_Point_Diff.csv")
+  write.csv("other_results/Loo_Results_Point_Diff.csv")
 
 df_compare_spread <- loo_compare(loo_objects[c(2,4)])
 rownames(df_compare_spread)[rownames(df_compare_spread) == "model1"] = "No Split"
@@ -237,4 +267,4 @@ rownames(df_compare_spread)[rownames(df_compare_spread) == "model2"] = "Split By
 df_compare_spread |>
   as.data.frame() |>
   mutate(outcome = "Spread") |>
-  write.csv("Loo_Results_Spread.csv")
+  write.csv("other_results/Loo_Results_Spread.csv")

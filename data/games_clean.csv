@@ -1,4 +1,4 @@
-"game_id","season","era","home_team_name","away_team_name","home_team_id","away_team_id","true_home","bye","mnf","tnf","point_diff","spread_line","days_since_last_game_home_team","days_since_last_game_away_team"
+"game_id","season","era","home_team_name","away_team_name","home_team_id","away_team_id","true_home","bye","mnf","mini","point_diff","spread_line","days_since_last_game_home_team","days_since_last_game_away_team"
 2002090800,2002,"2002-10","WAS","ARI",32,1,1,0,0,0,8,6,NA,NA
 2002091505,2002,"2002-10","SEA","ARI",28,1,1,0,0,0,-11,4,7,7
 2002092205,2002,"2002-10","ARI","LAC",1,18,1,0,0,0,-8,-2.5,7,7

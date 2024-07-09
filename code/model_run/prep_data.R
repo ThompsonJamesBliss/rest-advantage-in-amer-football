@@ -25,7 +25,7 @@ df_games <- df_games_raw   |>
   mutate(
     bye = bye_home_team - bye_away_team,
 
-    tnf = case_when(days_since_last_game_home_team %in% seq(9, 11) &
+    mini = case_when(days_since_last_game_home_team %in% seq(9, 11) &
                       !(days_since_last_game_away_team %in% seq(9, 11)) &
                       (abs(days_since_last_game_home_team - days_since_last_game_away_team) >= 2) ~ 1,
                     days_since_last_game_away_team %in% seq(9, 11) &
@@ -54,16 +54,14 @@ df_games <- df_games_raw   |>
     true_home,
     bye,
     mnf,
-    tnf,
+    mini,
     point_diff,
     spread_line,
     days_since_last_game_home_team,
     days_since_last_game_away_team
   )  |>
   drop_na(-c("days_since_last_game_home_team",
-             "days_since_last_game_away_team",
-             "point_diff",
-             "spread_line"))
+             "days_since_last_game_away_team"))
 
 
 df_games |>

@@ -22,7 +22,7 @@ expand_log_lik <- function(model, likelihood, stan_data, outcome) {
            posterior$alpha_ha_intercept[i]) * stan_data$h_adv +
         posterior$alpha_bye[i, stan_data$era] * stan_data$bye +
         posterior$alpha_mnf[i] * stan_data$mnf +
-        posterior$alpha_tnf[i] * stan_data$tnf
+        posterior$alpha_tnf[i] * stan_data$mini
 
     } else if (likelihood == "no_split") {
 
@@ -32,7 +32,7 @@ expand_log_lik <- function(model, likelihood, stan_data, outcome) {
         posterior$alpha_ha_intercept[i]) * stan_data$h_adv +
         posterior$alpha_bye[i] * stan_data$bye +
         posterior$alpha_mnf[i] * stan_data$mnf +
-        posterior$alpha_tnf[i] * stan_data$tnf
+        posterior$alpha_tnf[i] * stan_data$mini
 
     }
 
@@ -42,3 +42,14 @@ expand_log_lik <- function(model, likelihood, stan_data, outcome) {
   return(log_lik)
 }
 
+
+points_to_prob <- function (points)  {
+  return(stats::pnorm(points, mean = 0, sd = 13.5))
+}
+
+
+
+pretty_digits <- function (value, digits) {
+  number_return <- format(round(value, digits = digits), nsmall = digits)
+  return(number_return)
+}
