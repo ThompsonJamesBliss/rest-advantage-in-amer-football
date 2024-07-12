@@ -102,7 +102,7 @@ for(f in list.files("stan_results", pattern = ".rds")[!grepl("season", list.file
 
   trace_plot <- traceplot(model, pars = c("alpha_bye",
                                           "alpha_mnf",
-                                          "alpha_tnf")) +
+                                          "alpha_mini")) +
     xlab("Iteration") +
     ggtitle(paste0("Trace Plot - ",model_title)) +
     theme_bw() +
@@ -110,7 +110,7 @@ for(f in list.files("stan_results", pattern = ".rds")[!grepl("season", list.file
     facet_wrap(~parameter,scales="fixed", labeller = as_labeller(function(x){
       c(
         "alpha_mnf" = "MNF",
-        "alpha_tnf" = "Mini",
+        "alpha_mini" = "Mini",
         "alpha_bye" = "Bye",
         "alpha_bye[1]" = "Bye, Pre",
         "alpha_bye[2]" = "Bye, Post"
@@ -137,7 +137,7 @@ for(f in list.files("stan_results", pattern = ".rds")[!grepl("season", list.file
     bind_rows(data.frame(type = "MNF",
                          value = model_results$alpha_mnf)) |>
     bind_rows(data.frame(type = "Mini",
-                         value = model_results$alpha_tnf)) |>
+                         value = model_results$alpha_mini)) |>
     bind_rows(data.frame(type = paste0("Home Adv (", max_season, ")"),
                          value = model_results$alpha_ha_trend * (max_season - min_season + 1) + model_results$alpha_ha_intercept))  |>
     bind_rows(data.frame(type = paste0("Home Adv (", min_season, ")"),

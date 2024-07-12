@@ -38,13 +38,11 @@ plot_box_by_season <- df_plot_data |>
   facet_wrap(~outcome) +
   ggtitle("Point advantage from the bye week") +
   theme_bw() +
-  theme(strip.background = element_blank(),
-        strip.text = element_text(size = 15),
-        plot.title = element_text(size = 15)) +
+  theme(strip.background = element_blank()) +
   xlab("Season") +
   ylab("Estimate") +
   scale_x_discrete(labels = ifelse(seq(2, 24) %% 2 == 0,
-                                   paste0("'", str_pad(seq(2, 24), pad = 0, width = 2),
+                                   paste0("'", str_pad(seq(2, 24), pad = 0, width = 2)),
                                    ""))
  
 
