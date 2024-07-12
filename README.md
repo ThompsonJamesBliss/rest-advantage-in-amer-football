@@ -12,12 +12,11 @@ NOTE: Data was partially pulled from internal NFL database so no R file is inclu
 ## Code/Model_Run
 
 * __code/model/prep_data.R__ Script to clean the raw data and format it to include the rest advantages.
-* __code/model/run_analysis.R__ Script to iteratively fit the three models for each outcome (spread and point differential).
+* __code/model/run_analysis.R__ Script to iteratively fit the four models.
 
 ### Results Analysis
 
-* __code/results_analysis/by_era_model_viz.R__: Script to create a visualization for the era-by-era bye model.
-* __code/results_analysis/by_season_model_viz.R__ Script to create a visualization for the season-by-season bye model.
+* __code/results_analysis/split_bye_box.R__: Script to create a visualization for the era-by-era bye model.
 * __code/results_analysis/epl_check.R__: Script to create a csv for metrics on the English Premier League Schedule.
 * __code/results_analysis/table_data.R__: Script to create tables for latex.
 * __code/results_analysis/visualize_and_analyze_results.R__: Script to calculate LOO, plot team strengths and plot density plots.
