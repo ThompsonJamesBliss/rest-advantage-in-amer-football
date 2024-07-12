@@ -22,7 +22,7 @@ loo_objects <- list()
 
 i <- 1
 
-for (f in list.files("stan_results", pattern = ".rds")[!grepl("season", list.files("stan_results", pattern = ".rds"))]) {
+for (f in list.files("stan_results", pattern = ".rds")) {
   print(f)
 
   file_split <- str_split_1(f, "__|\\.")
@@ -171,23 +171,39 @@ for (f in list.files("stan_results", pattern = ".rds")[!grepl("season", list.fil
     mutate(
       type = fct_reorder(type, value),
     )
+  
+  #make font smaller
+  #dotted line through figures
+  #spread / point diff different scale as eachother
+  #integers on scale
+  
+  if(outcome == "point_diff"){
+    
+    lim <- c(-2, 6)
+    
+  } else if(outcome == "spread_line"){
+    
+    lim <- c(-1, 4.5)
+  
+  }
 
   plot_density_ridges <- df_plot_data |>
     ggplot(aes(value, type)) +
-    geom_vline(xintercept = 0, linetype = "dashed") +
     geom_density_ridges(fill = "lightblue", scale = 0.95) +
+    geom_vline(xintercept = 0, linetype = "dashed") +
     theme_bw() +
     xlab("Points Added") +
     ylab("") +
-    xlim(-2.5, 7.5) +
+    scale_x_continuous(limits = lim) +
     ggtitle(model_title) +
     geom_text(
       df_plot_data |>
         group_by(type) |>
         summarise(text = paste0(pretty_digits(mean(value > 0) * 100, 1), "%")),
-      mapping = aes(-2, type, label = text),
-      vjust = -0.1,
-      hjust = 0.5
+      mapping = aes(min(lim) + 0.05, type, label = text),
+      vjust = -0.2,
+      hjust = 0,
+      size = 3
     ) +
     labs(subtitle = model_sub) +
     geom_text(
@@ -195,15 +211,16 @@ for (f in list.files("stan_results", pattern = ".rds")[!grepl("season", list.fil
         group_by(type) |>
         summarise(text = paste0(
           pretty_digits(median(value), 2),
-          "\n(",
+          " (",
           pretty_digits(quantile(value, 0.025), 2),
           ",",
           pretty_digits(quantile(value, 0.975), 2),
           ")"
         )),
-      mapping = aes(x = 6, type, label = text),
-      vjust = -0.1,
-      hjust = 0.5
+      mapping = aes(x = max(lim) - 0.05, type, label = text),
+      vjust = -0.2,
+      hjust = 1,
+      size = 3
     ) +
     geom_text(
       df_plot_data |>
@@ -214,9 +231,10 @@ for (f in list.files("stan_results", pattern = ".rds")[!grepl("season", list.fil
           text = "Pct >0:",
         ),
       fontface = "bold",
-      mapping = aes(x = -2, label = text, y = type),
-      vjust = -4.1,
-      hjust = 0.5
+      mapping = aes(x = min(lim) + 0.05, label = text, y = type),
+      vjust = -5.1,
+      hjust = 0,
+      size = 3
     ) +
     geom_text(
       df_plot_data |>
@@ -227,14 +245,22 @@ for (f in list.files("stan_results", pattern = ".rds")[!grepl("season", list.fil
           text = "Median (95% CI):",
         ),
       fontface = "bold",
-      mapping = aes(x = 6, label = text, y = type),
-      vjust = -4.1,
-      hjust = 0.5
+      mapping = aes(x = max(lim) -0.05, label = text, y = type),
+      vjust = -5.1,
+      hjust = 1,
+      size = 3
     )
 
 
-
-  fontface <- "bold"
+  plot_density_ridges <- plot_density_ridges +
+    geom_segment(data = ggplot_build(plot_density_ridges)$data[[1]] |>
+    group_by(y) |>
+    filter(ymax == max(ymax)) |>
+    ungroup(),
+    
+    aes(x = x, xend = x, y = y, yend = ymax))
+  
+  
 
   ggsave(paste0("visualizations/density__", outcome, "__", type, "__", seasons, ".png"),
     plot_density_ridges,

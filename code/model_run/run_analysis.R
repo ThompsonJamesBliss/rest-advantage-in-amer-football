@@ -59,7 +59,7 @@ for (o in params$outcomes) {
 
   # ### Fit Model
   model <- stan(
-    file = "stan/model_split_bye_CBA.stan",
+    file = "stan/model_split_bye.stan",
     data = stan_data,
     seed = params$seed,
     chains = params$chains,
@@ -72,34 +72,11 @@ for (o in params$outcomes) {
 
   write_rds(
     model,
-    paste0("stan_results/split_bye_cba__", o, "__", params$min_season, "_", params$max_season, ".rds")
+    paste0("stan_results/split_bye__", o, "__", params$min_season, "_", params$max_season, ".rds")
   )
 
 
   rm("model")
 
 
-
-  stan_data$outcome <- df_games |> pull(o)
-
-  # ### Fit Model
-  model <- stan(
-    file = "stan/model_split_bye_season.stan",
-    data = stan_data,
-    seed = params$seed,
-    chains = params$chains,
-    iter = params$iter,
-    warmup = params$warmup,
-    control = list(adapt_delta = params$adapt_delta),
-    pars = c("mu"),
-    include = F
-  )
-
-  write_rds(
-    model,
-    paste0("stan_results/split_bye_season__", o, "__", params$min_season, "_", params$max_season, ".rds")
-  )
-
-
-  rm("model")
 }

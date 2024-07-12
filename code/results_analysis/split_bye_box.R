@@ -7,7 +7,7 @@ df_plot_data <- data.frame()
 source("code/utils.R")
 
 
-for (f in list.files("stan_results", pattern = "^(^split_bye|^.rds)")[!grepl("season", list.files("stan_results", pattern = "^(^split_bye|^.rds)"))]) {
+for (f in list.files("stan_results", pattern = "^(^split_bye|^.rds)")) {
   file_split <- str_split_1(f, "__|\\.")
 
   outcome <- tools::toTitleCase(gsub("_", " ", file_split[2]))
