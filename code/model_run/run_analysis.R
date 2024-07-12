@@ -10,7 +10,8 @@ params <- list(
   iter = 2000,
   warmup = 500,
   adapt_delta = 0.95,
-  outcomes = c("point_diff", "spread_line"))
+  outcomes = c("point_diff", "spread_line")
+)
 
 df_games <- read_csv("data/games_clean.csv")
 
@@ -31,11 +32,7 @@ stan_data <- list(
 )
 
 
-for(o in params$outcomes){
-  
-  
-
-
+for (o in params$outcomes) {
   # ### Fit Model
   model <- stan(
     file = "stan/model_no_split.stan",
@@ -49,8 +46,10 @@ for(o in params$outcomes){
     include = F
   )
 
-  write_rds(model,
-            paste0("stan_results/no_split__", o, "__", params$min_season, "_", params$max_season,  ".rds"))
+  write_rds(
+    model,
+    paste0("stan_results/no_split__", o, "__", params$min_season, "_", params$max_season, ".rds")
+  )
 
 
   rm("model")
@@ -71,16 +70,18 @@ for(o in params$outcomes){
     include = F
   )
 
-  write_rds(model,
-            paste0("stan_results/split_bye_cba__", o, "__", params$min_season, "_", params$max_season,  ".rds"))
+  write_rds(
+    model,
+    paste0("stan_results/split_bye_cba__", o, "__", params$min_season, "_", params$max_season, ".rds")
+  )
 
 
   rm("model")
 
 
-  
+
   stan_data$outcome <- df_games |> pull(o)
-  
+
   # ### Fit Model
   model <- stan(
     file = "stan/model_split_bye_season.stan",
@@ -93,14 +94,12 @@ for(o in params$outcomes){
     pars = c("mu"),
     include = F
   )
-  
-  write_rds(model,
-            paste0("stan_results/split_bye_season__", o, "__", params$min_season, "_", params$max_season,  ".rds"))
-  
-  
-  rm("model")
-  
-  
-  
-}
 
+  write_rds(
+    model,
+    paste0("stan_results/split_bye_season__", o, "__", params$min_season, "_", params$max_season, ".rds")
+  )
+
+
+  rm("model")
+}
