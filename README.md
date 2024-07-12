@@ -7,7 +7,7 @@ This repository contains the data and code used in a manuscript "Bye-Bye, Bye Ad
 * __data/games_clean.csv:__ Cleaned version of games_raw.csv which includes columns that indicate various rest advantages for each NFL game from the 2002-2023 Regular Seasons. (Used directly in model)
 * __data/post_season_games.csv:__ Includes info on season, teams, scores, spreads and bye advantages for each NFL game from the 2002-2023 Postseasons. (Used for supporting analysis)
 
-NOTE: Data was partially pulled from internal NFL database so no R file is included to pull data.
+NOTE: The raw data was partially pulled from internal NFL database so no R file is included to pull the raw data.
 
 ## Code/Model_Run
 
