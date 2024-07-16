@@ -36,7 +36,7 @@ for (f in list.files("stan_results", pattern = "^(^split_bye|^.rds)")) {
       ),
       df_plot_data
     )
-  
+
   df_compare <- data.frame(
     outcome = outcome,
     percent_pre_greater = mean(model_results$alpha_bye[, 1] > model_results$alpha_bye[, 2])
@@ -64,4 +64,3 @@ ggsave(paste0("visualizations/box_plot_bye_compare.png"),
   plot_box,
   width = 5, height = 4
 )
-

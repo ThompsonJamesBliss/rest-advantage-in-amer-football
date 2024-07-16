@@ -169,16 +169,12 @@ for (f in list.files("stan_results", pattern = ".rds")) {
     mutate(
       type = fct_reorder(type, value),
     )
-  
-  
-  if(outcome == "point_diff"){
-    
+
+
+  if (outcome == "point_diff") {
     lim <- c(-2, 6)
-    
-  } else if(outcome == "spread_line"){
-    
+  } else if (outcome == "spread_line") {
     lim <- c(-1, 5)
-  
   }
 
   plot_density_ridges <- df_plot_data |>
@@ -239,7 +235,7 @@ for (f in list.files("stan_results", pattern = ".rds")) {
           text = "Median (95% CI):",
         ),
       fontface = "bold",
-      mapping = aes(x = max(lim) -0.05, label = text, y = type),
+      mapping = aes(x = max(lim) - 0.05, label = text, y = type),
       vjust = -5.1,
       hjust = 1,
       size = 3
@@ -247,14 +243,15 @@ for (f in list.files("stan_results", pattern = ".rds")) {
 
 
   plot_density_ridges <- plot_density_ridges +
-    geom_segment(data = ggplot_build(plot_density_ridges)$data[[1]] |>
-    group_by(y) |>
-    filter(ymax == max(ymax)) |>
-    ungroup(),
-    
-    aes(x = x, xend = x, y = y, yend = ymax))
-  
-  
+    geom_segment(
+      data = ggplot_build(plot_density_ridges)$data[[1]] |>
+        group_by(y) |>
+        filter(ymax == max(ymax)) |>
+        ungroup(),
+      aes(x = x, xend = x, y = y, yend = ymax)
+    )
+
+
 
   ggsave(paste0("visualizations/density__", outcome, "__", type, ".png"),
     plot_density_ridges,
@@ -297,8 +294,10 @@ rownames(df_compare_point_diff)[rownames(df_compare_point_diff) == "model2"] <- 
 
 df_compare_point_diff |>
   as.data.frame() |>
-  mutate(outcome = "Point Diff",
-         'n_se' = abs(elpd_diff/pmax(1e-6, se_diff))) |>
+  mutate(
+    outcome = "Point Diff",
+    "n_se" = abs(elpd_diff / pmax(1e-6, se_diff))
+  ) |>
   write.csv("other_results/Loo_Results_Point_Diff.csv")
 
 df_compare_spread <- loo_compare(loo_objects[c(2, 4)])
@@ -307,6 +306,8 @@ rownames(df_compare_spread)[rownames(df_compare_spread) == "model2"] <- "Split B
 
 df_compare_spread |>
   as.data.frame() |>
-  mutate(outcome = "Spread",
-         'n_se' = abs(elpd_diff/pmax(1e-6, se_diff))) |>
+  mutate(
+    outcome = "Spread",
+    "n_se" = abs(elpd_diff / pmax(1e-6, se_diff))
+  ) |>
   write.csv("other_results/Loo_Results_Spread.csv")

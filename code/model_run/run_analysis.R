@@ -34,10 +34,9 @@ stan_data <- list(
 
 
 for (o in params$outcomes) {
-  
   stan_data$outcome <- df_games |> pull(o)
-  
-  
+
+
   # ### Fit Model
   model <- stan(
     file = "stan/model_no_split.stan",
@@ -79,6 +78,4 @@ for (o in params$outcomes) {
 
 
   rm("model")
-
-
 }

@@ -136,15 +136,20 @@ write(
   "other_results/table_count.txt"
 )
 
-table_net_bye = df_games_reg |>
-  pivot_longer(cols = c("home_team_name",
-                        "away_team_name"),
-               names_to = "side",
-               values_to = "team") |>
+table_net_bye <- df_games_reg |>
+  pivot_longer(
+    cols = c(
+      "home_team_name",
+      "away_team_name"
+    ),
+    names_to = "side",
+    values_to = "team"
+  ) |>
   mutate(
     bye = ifelse(side == "home_team_name",
-                 bye,
-                 -bye)
+      bye,
+      -bye
+    )
   ) |>
   group_by(season, team) |>
   summarise(
