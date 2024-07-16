@@ -22,6 +22,10 @@ loo_objects <- list()
 
 i <- 1
 
+min_season <- min(df_games$season)
+
+max_season <- max(df_games$season)
+
 for (f in list.files("stan_results", pattern = ".rds")) {
   print(f)
 
@@ -30,12 +34,6 @@ for (f in list.files("stan_results", pattern = ".rds")) {
   type <- file_split[1]
 
   outcome <- file_split[2]
-
-  seasons <- file_split[3]
-
-  min_season <- as.integer(str_split_1(seasons, "_")[1])
-
-  max_season <- as.integer(str_split_1(seasons, "_")[2])
 
   model_title <- case_when(
     outcome == "point_diff" & type == "no_split" ~ "Point Differential Impact",
@@ -106,7 +104,7 @@ for (f in list.files("stan_results", pattern = ".rds")) {
     ) +
     ggtitle(paste0("Team Strengths - ", model_title))
 
-  ggsave(paste0("visualizations/points_added__", outcome, "__", type, "__", seasons, ".png"),
+  ggsave(paste0("visualizations/points_added__", outcome, "__", type, ".png"),
     plot_team_strength,
     width = 5,
     height = 3.1
@@ -131,7 +129,7 @@ for (f in list.files("stan_results", pattern = ".rds")) {
       )[x]
     }), nrow = 2, ncol = 2)
 
-  ggsave(paste0("visualizations/trace__", outcome, "__", type, "__", seasons, ".png"), trace_plot, width = 5, height = 4)
+  ggsave(paste0("visualizations/trace__", outcome, "__", type, ".png"), trace_plot, width = 5, height = 4)
 
   if (length(dim(model_results$alpha_bye)) == 1) {
     df_plot_data <- data.frame(
@@ -172,10 +170,6 @@ for (f in list.files("stan_results", pattern = ".rds")) {
       type = fct_reorder(type, value),
     )
   
-  #make font smaller
-  #dotted line through figures
-  #spread / point diff different scale as eachother
-  #integers on scale
   
   if(outcome == "point_diff"){
     
@@ -183,13 +177,13 @@ for (f in list.files("stan_results", pattern = ".rds")) {
     
   } else if(outcome == "spread_line"){
     
-    lim <- c(-1, 4.5)
+    lim <- c(-1, 5)
   
   }
 
   plot_density_ridges <- df_plot_data |>
     ggplot(aes(value, type)) +
-    geom_density_ridges(fill = "lightblue", scale = 0.95) +
+    geom_density_ridges(fill = "lightblue", scale = 0.95, bandwidth = 0.15) +
     geom_vline(xintercept = 0, linetype = "dashed") +
     theme_bw() +
     xlab("Points Added") +
@@ -201,7 +195,7 @@ for (f in list.files("stan_results", pattern = ".rds")) {
         group_by(type) |>
         summarise(text = paste0(pretty_digits(mean(value > 0) * 100, 1), "%")),
       mapping = aes(min(lim) + 0.05, type, label = text),
-      vjust = -0.2,
+      vjust = -0.3,
       hjust = 0,
       size = 3
     ) +
@@ -213,12 +207,12 @@ for (f in list.files("stan_results", pattern = ".rds")) {
           pretty_digits(median(value), 2),
           " (",
           pretty_digits(quantile(value, 0.025), 2),
-          ",",
+          ", ",
           pretty_digits(quantile(value, 0.975), 2),
           ")"
         )),
       mapping = aes(x = max(lim) - 0.05, type, label = text),
-      vjust = -0.2,
+      vjust = -0.3,
       hjust = 1,
       size = 3
     ) +
@@ -262,7 +256,7 @@ for (f in list.files("stan_results", pattern = ".rds")) {
   
   
 
-  ggsave(paste0("visualizations/density__", outcome, "__", type, "__", seasons, ".png"),
+  ggsave(paste0("visualizations/density__", outcome, "__", type, ".png"),
     plot_density_ridges,
     width = 5, height = 5
   )
@@ -303,7 +297,8 @@ rownames(df_compare_point_diff)[rownames(df_compare_point_diff) == "model2"] <- 
 
 df_compare_point_diff |>
   as.data.frame() |>
-  mutate(outcome = "Point Diff") |>
+  mutate(outcome = "Point Diff",
+         'n_se' = abs(elpd_diff/pmax(1e-6, se_diff))) |>
   write.csv("other_results/Loo_Results_Point_Diff.csv")
 
 df_compare_spread <- loo_compare(loo_objects[c(2, 4)])
@@ -312,5 +307,6 @@ rownames(df_compare_spread)[rownames(df_compare_spread) == "model2"] <- "Split B
 
 df_compare_spread |>
   as.data.frame() |>
-  mutate(outcome = "Spread") |>
+  mutate(outcome = "Spread",
+         'n_se' = abs(elpd_diff/pmax(1e-6, se_diff))) |>
   write.csv("other_results/Loo_Results_Spread.csv")

@@ -30,7 +30,7 @@ expand_log_lik <- function(model, likelihood, stan_data, outcome) {
         posterior$alpha_mini[i] * stan_data$mini
     }
 
-    log_lik[i, ] <- dnorm(x = outcome, mean = mu, sd = posterior$sigma_m[i], log = T)
+    log_lik[i, ] <- dnorm(x = outcome, mean = mu, sd = posterior$sigma_game[i], log = T)
   }
 
   return(log_lik)

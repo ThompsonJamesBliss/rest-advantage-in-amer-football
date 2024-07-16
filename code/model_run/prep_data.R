@@ -38,10 +38,14 @@ df_games <- df_games_raw |>
       TRUE ~ 0
     ),
     mnf = case_when(
-      days_since_last_game_home_team == 6 &
-        days_since_last_game_away_team >= 7 ~ -1,
-      days_since_last_game_away_team == 6 &
-        days_since_last_game_home_team >= 7 ~ 1,
+      (days_since_last_game_home_team == 6 &
+        days_since_last_game_away_team >= 7) |
+        (days_since_last_game_home_team == 5 &
+           days_since_last_game_away_team >= 6) ~ -1,
+      (days_since_last_game_away_team == 6 &
+        days_since_last_game_home_team >= 7) |
+        (days_since_last_game_away_team == 5 &
+           days_since_last_game_home_team >= 6) ~ 1,
       TRUE ~ 0
     ),
     era = ifelse(season >= 2011,

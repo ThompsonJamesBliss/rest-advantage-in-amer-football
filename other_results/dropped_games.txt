@@ -1,0 +1,64 @@
+% latex table generated in R 4.4.0 by xtable 1.8-4 package
+% Fri Jul 12 20:16:18 2024
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrlll}
+  \hline
+season & week & home\_team & away\_team & drop\_reason \\ 
+  \hline
+2010 & 16 & PHI & MIN & Rescheduled or Cancelled Game \\ 
+  2010 & 17 & DET & MIN & Game After Rescheduled or Cancelled Game \\ 
+  2010 & 17 & PHI & DAL & Game After Rescheduled or Cancelled Game \\ 
+  2020 & 4 & KC & NE & Rescheduled or Cancelled Game \\ 
+  2020 & 5 & KC & LV & Game After Rescheduled or Cancelled Game \\ 
+  2020 & 5 & TEN & BUF & Rescheduled or Cancelled Game \\ 
+  2020 & 6 & MIA & NYJ & Rescheduled or Cancelled Game \\ 
+  2020 & 6 & TEN & HOU & Game After Rescheduled or Cancelled Game \\ 
+  2020 & 6 & BUF & KC & Rescheduled or Cancelled Game \\ 
+  2020 & 6 & NE & DEN & Rescheduled or Cancelled Game \\ 
+  2020 & 7 & LAC & JAX & Rescheduled or Cancelled Game \\ 
+  2020 & 7 & DEN & KC & Game After Rescheduled or Cancelled Game \\ 
+  2020 & 7 & NE & SF & Game After Rescheduled or Cancelled Game \\ 
+  2020 & 7 & NYJ & BUF & Game After Rescheduled or Cancelled Game \\ 
+  2020 & 7 & TEN & PIT & Rescheduled or Cancelled Game \\ 
+  2020 & 8 & DEN & LAC & Rescheduled or Cancelled Game \\ 
+  2020 & 8 & CIN & TEN & Game After Rescheduled or Cancelled Game \\ 
+  2020 & 8 & MIA & LA & Game After Rescheduled or Cancelled Game \\ 
+  2020 & 8 & BAL & PIT & Rescheduled or Cancelled Game \\ 
+  2020 & 9 & DAL & PIT & Game After Rescheduled or Cancelled Game \\ 
+  2020 & 9 & LAC & LV & Game After Rescheduled or Cancelled Game \\ 
+  2020 & 9 & ATL & DEN & Game After Rescheduled or Cancelled Game \\ 
+  2020 & 9 & IND & BAL & Game After Rescheduled or Cancelled Game \\ 
+  2020 & 9 & JAX & HOU & Game After Rescheduled or Cancelled Game \\ 
+  2020 & 10 & MIA & LAC & Rescheduled or Cancelled Game \\ 
+  2020 & 11 & DEN & MIA & Rescheduled or Cancelled Game \\ 
+  2020 & 11 & LAC & NYJ & Rescheduled or Cancelled Game \\ 
+  2020 & 12 & DEN & NO & Game After Rescheduled or Cancelled Game \\ 
+  2020 & 12 & BUF & LAC & Game After Rescheduled or Cancelled Game \\ 
+  2020 & 12 & NYJ & MIA & Game After Rescheduled or Cancelled Game \\ 
+  2020 & 12 & PIT & BAL & Rescheduled or Cancelled Game \\ 
+  2020 & 13 & PIT & WAS & Rescheduled or Cancelled Game \\ 
+  2020 & 13 & BAL & DAL & Rescheduled or Cancelled Game \\ 
+  2020 & 14 & CLE & BAL & Game After Rescheduled or Cancelled Game \\ 
+  2020 & 14 & BUF & PIT & Game After Rescheduled or Cancelled Game \\ 
+  2020 & 14 & SF & WAS & Game After Rescheduled or Cancelled Game \\ 
+  2020 & 14 & CIN & DAL & Game After Rescheduled or Cancelled Game \\ 
+  2021 & 15 & TB & NO & Game After Rescheduled or Cancelled Game \\ 
+  2021 & 15 & LA & SEA & Rescheduled or Cancelled Game \\ 
+  2021 & 15 & JAX & HOU & Game After Rescheduled or Cancelled Game \\ 
+  2021 & 15 & PIT & TEN & Game After Rescheduled or Cancelled Game \\ 
+  2021 & 15 & PHI & WAS & Rescheduled or Cancelled Game \\ 
+  2021 & 15 & CLE & LV & Rescheduled or Cancelled Game \\ 
+  2021 & 16 & PHI & NYG & Game After Rescheduled or Cancelled Game \\ 
+  2021 & 16 & LV & DEN & Game After Rescheduled or Cancelled Game \\ 
+  2021 & 16 & MIN & LA & Game After Rescheduled or Cancelled Game \\ 
+  2021 & 16 & DAL & WAS & Game After Rescheduled or Cancelled Game \\ 
+  2021 & 16 & SEA & CHI & Game After Rescheduled or Cancelled Game \\ 
+  2021 & 16 & GB & CLE & Game After Rescheduled or Cancelled Game \\ 
+  2022 & 17 & CIN & BUF & Rescheduled or Cancelled Game \\ 
+  2022 & 18 & BUF & NE & Game After Rescheduled or Cancelled Game \\ 
+  2022 & 18 & CIN & BAL & Game After Rescheduled or Cancelled Game \\ 
+   \hline
+\end{tabular}
+\end{table}
+

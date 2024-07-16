@@ -105,6 +105,11 @@ write(
   "other_results/dropped_games.txt"
 )
 
+
+
+
+
+
 table_games_count <- df_games_reg |>
   drop_na(c(days_since_last_game_home_team, days_since_last_game_away_team)) |>
   rename(
@@ -131,6 +136,32 @@ write(
   "other_results/table_count.txt"
 )
 
+table_net_bye = df_games_reg |>
+  pivot_longer(cols = c("home_team_name",
+                        "away_team_name"),
+               names_to = "side",
+               values_to = "team") |>
+  mutate(
+    bye = ifelse(side == "home_team_name",
+                 bye,
+                 -bye)
+  ) |>
+  group_by(season, team) |>
+  summarise(
+    bye = sum(bye)
+  ) |>
+  ungroup() |>
+  mutate(
+    season = paste0("'", substr(season, 3, 4))
+  ) |>
+  pivot_wider(names_from = season, values_from = bye)
+
+
+
+write(
+  print(xtable::xtable(x = table_net_bye, digits = 0), include.rownames = FALSE),
+  "other_results/table_count.txt"
+)
 
 
 df_games_post <- read_csv("data/post_season_games.csv")

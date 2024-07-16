@@ -1,0 +1,18 @@
+% latex table generated in R 4.4.0 by xtable 1.8-4 package
+% Sun Jul 14 14:20:10 2024
+\begin{table}[ht]
+\centering
+\begin{tabular}{llrrrrr}
+  \hline
+Type & era & n & Point Diff & Win Pct & Exp Win Pct & Cover \% \\ 
+  \hline
+ & 2002-10 &   63 & 2.476 & 0.556 & 0.581 & 0.484 \\ 
+  Equivalent Rest & 2011-23 &  107 & 3.766 & 0.570 & 0.596 & 0.486 \\ 
+   & All &  170 & 3.288 & 0.565 & 0.591 & 0.485 \\ 
+   & 2002-10 &   36 & 5.167 & 0.611 & 0.672 & 0.417 \\ 
+  Bye Rest & 2011-23 &   44 & 7.341 & 0.773 & 0.690 & 0.489 \\ 
+   & All &   80 & 6.362 & 0.700 & 0.682 & 0.456 \\ 
+   \hline
+\end{tabular}
+\end{table}
+
