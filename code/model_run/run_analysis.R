@@ -76,6 +76,5 @@ for (o in params$outcomes) {
     paste0("stan_results/split_bye__", o, "__", params$min_season, "_", params$max_season, ".rds")
   )
 
-
   rm("model")
 }
