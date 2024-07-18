@@ -9,7 +9,7 @@ This repository contains the data and code used in a manuscript "Bye-Bye, Bye Ad
 
 NOTE: The raw data was partially pulled from internal NFL database so no R file is included to pull the raw data.
 
-## code
+## Code
 
 ### Model Run
 
