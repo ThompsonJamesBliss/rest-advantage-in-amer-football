@@ -9,7 +9,9 @@ This repository contains the data and code used in a manuscript "Bye-Bye, Bye Ad
 
 NOTE: The raw data was partially pulled from internal NFL database so no R file is included to pull the raw data.
 
-## Code/Model_Run
+## Code
+
+### Model Run
 
 * __code/model/prep_data.R__ Script to clean the raw data and format it to include the rest advantages.
 * __code/model/run_analysis.R__ Script to iteratively fit the four models.
