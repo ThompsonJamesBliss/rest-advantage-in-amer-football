@@ -132,12 +132,12 @@ for (f in list.files("stan_results", pattern = ".rds")) {
   ggsave(paste0("visualizations/trace__", outcome, "__", type, ".png"), trace_plot, width = 5, height = 4)
 
   if (length(dim(model_results$alpha_bye)) == 1) {
-    df_plot_data_all <- data.frame(
+    df_plot_data <- data.frame(
       type = "Bye",
       value = model_results$alpha_bye
     )
   } else {
-    df_plot_data_all <- data.frame(
+    df_plot_data <- data.frame(
       type = "Bye (2002-10)",
       value = model_results$alpha_bye[, 1]
     ) |>
@@ -147,7 +147,7 @@ for (f in list.files("stan_results", pattern = ".rds")) {
       ))
   }
 
-  df_plot_data_all <- df_plot_data_all |>
+  df_plot_data <- df_plot_data |>
     bind_rows(data.frame(
       type = "MNF",
       value = model_results$alpha_mnf
@@ -155,43 +155,7 @@ for (f in list.files("stan_results", pattern = ".rds")) {
     bind_rows(data.frame(
       type = "Mini",
       value = model_results$alpha_mini
-    )) 
-  
-  
-  df_plot_data_scatter <- df_plot_data_all |>
-    bind_rows(data.frame(
-      type = paste0("Home Adv Trend"),
-      value = model_results$alpha_ha_trend
-    )) |>
-    bind_rows(data.frame(
-      type = paste0("Home Adv Intercept"),
-      value = model_results$alpha_ha_intercept
-    )) |>
-    group_by(type) |>
-    mutate(row = row_number()) |>
-    ungroup() |>
-    pivot_wider(names_from = type, values_from = value)
-  
-  
-  
-  
-  plot_scatter <- GGally::ggpairs(df_plot_data_scatter |>
-                    select(-c("row")), aes(alpha = 0.2)) +
-    theme_bw() +
-    ggtitle(paste0(model_title, " Scatter")) +
-    labs(subtitle = model_sub)
-  
-  
-  
-  ggsave(paste0("visualizations/scatter__", outcome, "__", type, ".png"),
-         plot_scatter,
-         width = 8, height = 8
-  )
-  
-  
-  
-  
-  df_plot_data_density <- df_plot_data_all |>
+    ))   |>
     bind_rows(data.frame(
       type = paste0("Home Adv (", max_season, ")"),
       value = model_results$alpha_ha_trend * (max_season - min_season + 1) + model_results$alpha_ha_intercept
@@ -200,8 +164,9 @@ for (f in list.files("stan_results", pattern = ".rds")) {
       type = paste0("Home Adv (", min_season, ")"),
       value = model_results$alpha_ha_trend + model_results$alpha_ha_intercept
     ))
-
-  df_plot_data_density <- df_plot_data_density |>
+  
+  
+  df_plot_data <- df_plot_data |>
     mutate(
       type = fct_reorder(type, value),
     )
@@ -213,7 +178,7 @@ for (f in list.files("stan_results", pattern = ".rds")) {
     lim <- c(-1, 5)
   }
 
-  plot_density_ridges <- df_plot_data_density |>
+  plot_density_ridges <- df_plot_data |>
     ggplot(aes(value, type)) +
     geom_density_ridges(fill = "lightblue", scale = 0.95, bandwidth = 0.15) +
     geom_vline(xintercept = 0, linetype = "dashed") +
@@ -223,7 +188,7 @@ for (f in list.files("stan_results", pattern = ".rds")) {
     scale_x_continuous(limits = lim) +
     ggtitle(model_title) +
     geom_text(
-      df_plot_data_density |>
+      df_plot_data |>
         group_by(type) |>
         summarise(text = paste0(pretty_digits(mean(value > 0) * 100, 1), "%")),
       mapping = aes(min(lim) + 0.05, type, label = text),
@@ -233,7 +198,7 @@ for (f in list.files("stan_results", pattern = ".rds")) {
     ) +
     labs(subtitle = model_sub) +
     geom_text(
-      df_plot_data_density |>
+      df_plot_data |>
         group_by(type) |>
         summarise(text = paste0(
           pretty_digits(median(value), 2),
@@ -249,7 +214,7 @@ for (f in list.files("stan_results", pattern = ".rds")) {
       size = 3
     ) +
     geom_text(
-      df_plot_data_density |>
+      df_plot_data |>
         ungroup() |>
         filter(type == last(levels(type))) |>
         group_by(type) |>
@@ -263,7 +228,7 @@ for (f in list.files("stan_results", pattern = ".rds")) {
       size = 3
     ) +
     geom_text(
-      df_plot_data_density |>
+      df_plot_data |>
         ungroup() |>
         filter(type == last(levels(type))) |>
         group_by(type) |>

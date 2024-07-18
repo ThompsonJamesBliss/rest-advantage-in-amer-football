@@ -52,7 +52,7 @@ for (o in params$outcomes) {
 
   write_rds(
     model,
-    paste0("stan_results/no_split__", o, "__", params$min_season, "_", params$max_season, ".rds")
+    paste0("stan_results/no_split__", o, ".rds")
   )
 
 
@@ -73,7 +73,7 @@ for (o in params$outcomes) {
 
   write_rds(
     model,
-    paste0("stan_results/split_bye__", o, "__", params$min_season, "_", params$max_season, ".rds")
+    paste0("stan_results/split_bye__", o, ".rds")
   )
 
   rm("model")
