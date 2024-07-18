@@ -71,8 +71,8 @@ for (f in list.files("stan_results", pattern = ".rds")) {
   plot_team_strength <- df_games |>
     select(season, team_id = away_team_id, team_name = away_team_name) |>
     distinct() |>
-    inner_join(df_club) |>
-    inner_join(df_team_strengths) |>
+    inner_join(df_club, by = "team_name") |>
+    inner_join(df_team_strengths, by = c("season", "team_id")) |>
     filter(team_division == params$team_division) |>
     ggplot(aes(season, theta, color = team_color, fill = team_color2)) +
     geom_line(lwd = 2) +
@@ -104,7 +104,7 @@ for (f in list.files("stan_results", pattern = ".rds")) {
     ) +
     ggtitle(paste0("Team Strengths - ", model_title))
 
-  ggsave(paste0("visualizations/points_added__", outcome, "__", type, ".png"),
+  ggsave(paste0("visualizations/points_added__", outcome, "__", type, ".jpeg"),
     plot_team_strength,
     width = 5,
     height = 3.1
@@ -129,7 +129,7 @@ for (f in list.files("stan_results", pattern = ".rds")) {
       )[x]
     }), nrow = 2, ncol = 2)
 
-  ggsave(paste0("visualizations/trace__", outcome, "__", type, ".png"), trace_plot, width = 5, height = 4)
+  ggsave(paste0("visualizations/trace__", outcome, "__", type, ".jpeg"), trace_plot, width = 5, height = 4)
 
   if (length(dim(model_results$alpha_bye)) == 1) {
     df_plot_data <- data.frame(
@@ -254,7 +254,7 @@ for (f in list.files("stan_results", pattern = ".rds")) {
 
 
 
-  ggsave(paste0("visualizations/density__", outcome, "__", type, ".png"),
+  ggsave(paste0("visualizations/density__", outcome, "__", type, ".jpeg"),
     plot_density_ridges,
     width = 5, height = 5
   )

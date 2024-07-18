@@ -52,15 +52,15 @@ plot_box <- df_plot_data |>
   theme_bw() +
   xlab("") +
   ylab("Points Added") +
-  scale_fill_manual(values = c("lightblue", "white"), guide = "none") +
+  scale_fill_manual(values = c("lightblue", "white")) +
   scale_color_manual(values = c("lightblue", "black")) +
   ggtitle("Point advantage from the bye week") +
-  labs(color = "") +
+  labs(color = "", fill = "") +
   scale_y_continuous(breaks = seq(-3, 5))
 
 
 
-ggsave(paste0("visualizations/box_plot_bye_compare.png"),
+ggsave(paste0("visualizations/box_plot_bye_compare.jpeg"),
   plot_box,
   width = 5, height = 4
 )
